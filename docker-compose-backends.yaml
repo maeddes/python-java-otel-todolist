@@ -10,3 +10,13 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=matthias
       - POSTGRES_DB=mydb
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686"
+      - "14250"
+      - "14269:14269"
+      - "4317:4317"
