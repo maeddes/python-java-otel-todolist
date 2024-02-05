@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-kompose.yaml
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.service: todoui-otelsdk
+  name: todoui-otelsdk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: todoui-otelsdk
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose-kompose.yaml
+        kompose.version: 1.32.0 (HEAD)
+      labels:
+        io.kompose.network/new-default: "true"
+        io.kompose.service: todoui-otelsdk
+    spec:
+      containers:
+        - env:
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://jaeger:4317
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: service.name=todoui-osdk
+          image: maeddes/todoui:otel
+          name: todoui-otelsdk
+          ports:
+            - containerPort: 8090
+              hostPort: 8090
+              protocol: TCP
+      restartPolicy: Always

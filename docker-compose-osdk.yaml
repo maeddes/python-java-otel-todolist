@@ -1,0 +1,41 @@
+version: '3.1'
+
+services:
+
+  postgresdb:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=matthias
+      - POSTGRES_DB=mydb
+
+  todobackend:
+    image: maeddes/todobackend:otx
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
+      OTEL_RESOURCE_ATTRIBUTES: service.name=todobackend
+    depends_on:
+      - postgresdb
+
+  todoui:
+    image: maeddes/todoui:otx
+    ports:
+      - "8090:8090"
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
+      OTEL_RESOURCE_ATTRIBUTES: service.name=todoui
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686"
+      - "14250"
+      - "14269:14269"
+

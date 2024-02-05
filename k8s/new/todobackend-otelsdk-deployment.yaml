@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-kompose.yaml
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.service: todobackend-otelsdk
+  name: todobackend-otelsdk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: todobackend-otelsdk
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose-kompose.yaml
+        kompose.version: 1.32.0 (HEAD)
+      labels:
+        io.kompose.network/new-default: "true"
+        io.kompose.service: todobackend-otelsdk
+    spec:
+      containers:
+        - env:
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: http://jaeger:4317
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: service.name=todobackend-osdk
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+          image: maeddes/todobackend:otel
+          name: todobackend-otelsdk
+          ports:
+            - containerPort: 8080
+              hostPort: 8080
+              protocol: TCP
+      restartPolicy: Always

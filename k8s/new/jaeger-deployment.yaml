@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose-kompose.yaml
+    kompose.version: 1.32.0 (HEAD)
+  labels:
+    io.kompose.service: jaeger
+  name: jaeger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: jaeger
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose-kompose.yaml
+        kompose.version: 1.32.0 (HEAD)
+      labels:
+        io.kompose.network/new-default: "true"
+        io.kompose.service: jaeger
+    spec:
+      containers:
+        - env:
+            - name: COLLECTOR_OTLP_ENABLED
+              value: "true"
+          image: jaegertracing/all-in-one:latest
+          name: jaeger
+          ports:
+            - containerPort: 16686
+              hostPort: 16686
+              protocol: TCP
+            - containerPort: 14250
+              protocol: TCP
+            - containerPort: 14269
+              hostPort: 14269
+              protocol: TCP
+            - containerPort: 4317
+              hostPort: 4317
+              protocol: TCP
+      restartPolicy: Always
