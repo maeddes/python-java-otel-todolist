@@ -5,6 +5,8 @@ HELP.md
 !**/src/test/**/target/
 *.jar
 
+__pycache__
+
 ### STS ###
 .apt_generated
 .classpath

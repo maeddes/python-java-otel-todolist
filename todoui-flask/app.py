@@ -6,13 +6,9 @@ import os
 app = Flask(__name__)
 
 # Set a default external API URL
-app.config['BACKEND_URL'] = 'http://localhost:8080/todos/'
-
 # Override the default URL if an environment variable is set
+app.config['BACKEND_URL'] = 'http://localhost:8080/todos/'
 app.config['BACKEND_URL'] = os.getenv('BACKEND_URL', app.config['BACKEND_URL'])
-
-# Sample data: list of ToDo items (plain strings)
-todos = ["Learn Flask", "Build a CRUD app", "Deploy the app"]
 
 @app.route('/')
 def index():
@@ -41,4 +37,5 @@ def delete(todo):
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
+    # app.run(debug=True) # doesn't work with auto instrumentation
