@@ -18,11 +18,12 @@ RUN opentelemetry-bootstrap --action=install
 EXPOSE 5000
 
 # Define environment variable
-# ENV OTEL_LOGS_EXPORTER="otlp"
-# ENV OTEL_METRICS_EXPORTER="otlp"
-# ENV OTEL_TRACES_EXPORTER="otlp"
-# ENV OTEL_EXPORTER_OTLP_ENDPOINT="localhost:4317"
+ENV OTEL_LOGS_EXPORTER="otlp"
+ENV OTEL_METRICS_EXPORTER="otlp"
+ENV OTEL_TRACES_EXPORTER="otlp"
+ENV OTEL_EXPORTER_OTLP_ENDPOINT="localhost:4317"
+ENV OTEL_SERVICE_NAME=todoui-flask
 
 # Run app.py when the container launches
-# CMD ["python", "app.py"]
-CMD ["flask", "run", "-p", "5000"]
+# CMD ["flask", "run", "-p", "5000"]
+CMD ["opentelemetry-instrument","python","app.py"]

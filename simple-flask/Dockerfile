@@ -4,7 +4,9 @@ FROM python:3
 # Set the working directory to /app
 WORKDIR /app
 
+COPY ./requirements.txt /app/requirements.txt
 # Install any needed packages specified in requirements.txt
+#RUN pip install -r requirements.txt
 RUN pip install flask
 #RUN pip install opentelemetry-distro
 #RUN pip install opentelemetry-exporter-otlp
@@ -24,5 +26,5 @@ COPY . /app
 # ENV OTEL_EXPORTER_OTLP_ENDPOINT="localhost:4317"
 
 # Run app.py when the container launches
-# CMD ["python", "app.py"]
-CMD ["flask", "run", "-p", "5000"]
+CMD ["python", "app.py"]
+#CMD ["flask", "run", "-p", "5000"]

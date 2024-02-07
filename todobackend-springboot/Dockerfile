@@ -1,7 +1,6 @@
 FROM eclipse-temurin:17
 RUN mkdir -p /opt/todobackend
 WORKDIR /opt/todobackend
-# COPY opentelemetry-javaagent.jar /opt/todobackend
 ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar .
 COPY todobackend/target/todobackend-0.0.1-SNAPSHOT.jar /opt/todobackend
 CMD ["java", "-jar", "-javaagent:/opt/todobackend/opentelemetry-javaagent.jar", "todobackend-0.0.1-SNAPSHOT.jar"]
