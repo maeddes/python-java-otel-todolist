@@ -16,6 +16,7 @@ services:
     image: maeddes/todobackend:v2402
     build:
       context: ./todobackend-springboot
+      dockerfile: Dockerfile-multistage
     ports:
       - "8080:8080"
     environment:
@@ -30,6 +31,7 @@ services:
     image: maeddes/todoui:otel
     build:
       context: ./todoui-thymeleaf
+      dockerfile: Dockerfile-multistage
     ports:
       - "8090:8090"
     environment:
@@ -40,6 +42,8 @@ services:
 
   todoui-flask:
     image: maeddes/todoui-flask:v0.1
+    build:
+      context: ./todoui-flask
     ports:
       - "5000:5000"
     environment:
