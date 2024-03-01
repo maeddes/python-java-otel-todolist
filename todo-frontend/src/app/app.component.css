@@ -1,0 +1,8 @@
+.appbar{
+    margin-bottom: 2vh;
+}
+.task-container{
+    padding: 2vh;
+    max-height: 70vh;
+    overflow: auto;
+}

@@ -1,0 +1,7 @@
+<mat-toolbar class="appbar" color="primary">
+  <span>Todo Application</span>
+</mat-toolbar>
+<app-input (updateTodosEvent)="updateTodos()"></app-input>
+<div class="task-container mat-elevation-z8" style="margin: 2vh;">
+  <app-task (updateTodosEvent)="updateTodos()" [todo]="todo" *ngFor="let todo of todos"></app-task>
+</div>
