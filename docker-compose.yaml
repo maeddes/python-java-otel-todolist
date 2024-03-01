@@ -4,6 +4,7 @@ services:
 
   postgresdb:
     image: postgres
+
     ports:
       - 5432:5432
     environment:
@@ -13,6 +14,8 @@ services:
 
   todobackend-springboot:
     image: maeddes/todobackend:v2402
+    build:
+      context: ./todobackend-springboot
     ports:
       - "8080:8080"
     environment:
@@ -25,6 +28,8 @@ services:
 
   todoui-thymeleaf:
     image: maeddes/todoui:otel
+    build:
+      context: ./todoui-thymeleaf
     ports:
       - "8090:8090"
     environment:
