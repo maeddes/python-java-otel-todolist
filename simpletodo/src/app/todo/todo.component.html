@@ -1,0 +1,15 @@
+<!-- todo.component.html -->
+
+<div>
+    <h2>ToDo App</h2>
+    <input [(ngModel)]="newTodo" placeholder="Add a new ToDo" />
+    <button (click)="addTodo()">Add</button>
+  
+    <ul>
+      <li *ngFor="let todo of todos; let i = index">
+        {{ todo }}
+        <button (click)="removeTodo(i)">Delete</button>
+      </li>
+    </ul>
+  </div>
+  
