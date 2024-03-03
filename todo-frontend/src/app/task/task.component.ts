@@ -29,7 +29,7 @@ export class TaskComponent{
     });
   }
   onDelete():void {
-    this.http.delete<Todo>(this.URL + 'todos/' + this.todo.todo_id).subscribe({
+    this.http.delete<Todo>(this.URL + 'todos/' + this.todo).subscribe({
       next: data => {
       },
       error: error => {

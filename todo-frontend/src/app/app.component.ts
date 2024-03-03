@@ -22,6 +22,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.getTodos().subscribe(data =>{this.todos = data;});
     console.log(this.todos);
+    console.log("Matthias");
   }
 
   getTodos(): Observable<Todo[]>{
