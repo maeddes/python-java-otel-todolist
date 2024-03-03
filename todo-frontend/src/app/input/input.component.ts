@@ -10,7 +10,7 @@ import { Todo } from '../app.component';
 })
 export class InputComponent {
   constructor( private http: HttpClient){}
-  private URL = 'http://localhost:3000/';
+  private URL = 'http://localhost:8080/';
   @Output() updateTodosEvent = new EventEmitter<void>();
 
   @ViewChild(FormGroupDirective) formGroupDirective!: FormGroupDirective;
@@ -21,7 +21,10 @@ export class InputComponent {
   onSubmit(){
     if(this.todoForm.valid){
       const headers = { 'content-type': 'application/json'};
-      this.http.post<Todo>(this.URL + 'todos', JSON.stringify(this.todoForm.value), {'headers': headers}).subscribe({
+      console.log("Submitted: "+JSON.stringify(this.todoForm.value));
+      var task = this.todoForm.controls.todo_task.value;
+      console.log("task: "+task);
+      this.http.post<Todo>(this.URL + 'todos/'+task, JSON.stringify(this.todoForm.value), {'headers': headers}).subscribe({
         next: data => {
         },
         error: error => {

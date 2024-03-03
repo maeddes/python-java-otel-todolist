@@ -6,7 +6,7 @@
     },
     "servers": [
       {
-        "url": "https://8080-maeddes-pythonjavaotelt-loel527niaq.ws-eu108.gitpod.io",
+        "url": "http://localhost:8080",
         "description": "Generated server url"
       }
     ],

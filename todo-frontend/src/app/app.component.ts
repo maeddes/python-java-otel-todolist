@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 export interface Todo{
-  todo_id: number;
+  //todo_id: number;
   todo_task: string;
 }
 
@@ -15,17 +15,17 @@ export interface Todo{
 export class AppComponent implements OnInit {
   constructor( private http: HttpClient){}
   
-  title = 'todo-frontend';
+  title = 'todo-frontend-X';
   todos : Todo[] = [];
-  private URL = 'https://8080-maeddes-pythonjavaotelt-loel527niaq.ws-eu108.gitpod.io/';
+  private URL = 'http://localhost:8080/';
 
   ngOnInit(): void {
     this.getTodos().subscribe(data =>{this.todos = data;});
-    console.log(this.todos);
-    console.log("Matthias");
+    console.log("init list: "+this.todos);
   }
 
   getTodos(): Observable<Todo[]>{
+    console.log("List: "+this.http.get<Todo[]>(this.URL + 'todos/'));
     return this.http.get<Todo[]>(this.URL + 'todos/');
   }
   updateTodos(){

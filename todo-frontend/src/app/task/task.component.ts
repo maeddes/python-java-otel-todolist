@@ -13,20 +13,15 @@ import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
 export class TaskComponent{
 
   constructor( private http: HttpClient, public dialog: MatDialog){}
-  private URL = 'https://8080-maeddes-pythonjavaotelt-loel527niaq.ws-eu108.gitpod.io/';
+  private URL = 'http://localhost:8080/';
   @Output() updateTodosEvent = new EventEmitter<void>();
   
   @Input() todo: Todo = {
-    todo_id: 0,
     todo_task: ''
   };
+
   onEdit():void {
-    const dialogRef = this.dialog.open(EditDialogComponent, {
-      data: this.todo,
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      this.updateTodosEvent.emit();
-    });
+    console.log("debug: "+this.todo+" task "+this.todo.todo_task);
   }
   onDelete():void {
     this.http.delete<Todo>(this.URL + 'todos/' + this.todo).subscribe({

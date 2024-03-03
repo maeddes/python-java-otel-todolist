@@ -22,7 +22,7 @@ export class EditDialogComponent {
   onSubmit(){
     if(this.todoForm.valid){
       const headers = { 'content-type': 'application/json'};
-      this.http.put<Todo>(this.URL + 'todos/' + this.data.todo_id, JSON.stringify(this.todoForm.value), {'headers': headers}).subscribe({
+      this.http.put<Todo>(this.URL + 'todos/' + this.data.todo_task, JSON.stringify(this.todoForm.value), {'headers': headers}).subscribe({
         next: data => {
         },
         error: error => {
