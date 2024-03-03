@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   
   title = 'todo-frontend';
   todos : Todo[] = [];
-  private URL = 'http://localhost:3000/';
+  private URL = 'https://8080-maeddes-pythonjavaotelt-loel527niaq.ws-eu108.gitpod.io/';
 
   ngOnInit(): void {
     this.getTodos().subscribe(data =>{this.todos = data;});
@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
   }
 
   getTodos(): Observable<Todo[]>{
-    return this.http.get<Todo[]>(this.URL + 'todos');
+    return this.http.get<Todo[]>(this.URL + 'todos/');
   }
   updateTodos(){
     setTimeout(() => {

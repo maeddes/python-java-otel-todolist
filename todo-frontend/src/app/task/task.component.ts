@@ -13,7 +13,7 @@ import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
 export class TaskComponent{
 
   constructor( private http: HttpClient, public dialog: MatDialog){}
-  private URL = 'http://localhost:3000/';
+  private URL = 'https://8080-maeddes-pythonjavaotelt-loel527niaq.ws-eu108.gitpod.io/';
   @Output() updateTodosEvent = new EventEmitter<void>();
   
   @Input() todo: Todo = {

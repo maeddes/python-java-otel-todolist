@@ -17,6 +17,7 @@ import java.util.List;
 
 @SpringBootApplication
 @RestController
+@CrossOrigin(origins = "*")
 public class TodobackendApplication {
 
 	@Value("${CF_INSTANCE_GUID:not_set}")
