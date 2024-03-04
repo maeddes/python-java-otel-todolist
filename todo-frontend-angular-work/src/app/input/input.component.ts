@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { Todo } from '../app.component';
@@ -9,7 +9,7 @@ import { Todo } from '../app.component';
   styleUrls: ['./input.component.css']
 })
 export class InputComponent {
-  constructor( private http: HttpClient){}
+  constructor(private http: HttpClient) { }
   private URL = 'http://localhost:8080/';
   @Output() updateTodosEvent = new EventEmitter<void>();
 
@@ -18,22 +18,26 @@ export class InputComponent {
     todo_task: new FormControl('', Validators.required),
   });
 
-  onSubmit(){
-    if(this.todoForm.valid){
-      const headers = { 'content-type': 'application/json'};
-      console.log("Submitted: "+JSON.stringify(this.todoForm.value));
+  onSubmit() {
+    if (this.todoForm.valid) {
+
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+      });
+      
       var task = this.todoForm.controls.todo_task.value;
-      console.log("task: "+task);
-      this.http.post<Todo>(this.URL + 'todos/'+task, JSON.stringify(this.todoForm.value), {'headers': headers}).subscribe({
-        next: data => {
-        },
-        error: error => {
+      console.log("task: " + task);
+      this.http.post<string>(this.URL + 'todos/' + task, null, { headers })
+        .subscribe({
+          next: data => {
+          },
+          error: error => {
             console.error('There was an error!', error);
-        }
-    })
-    this.formGroupDirective.resetForm();
-    this.todoForm.reset();
-    this.updateTodosEvent.emit();
+          }
+        })
+      this.formGroupDirective.resetForm();
+      this.todoForm.reset();
+      this.updateTodosEvent.emit();
+    }
   }
- }
 }

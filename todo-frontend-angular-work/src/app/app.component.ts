@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 
 export interface Todo{
   //todo_id: number;
@@ -17,10 +18,11 @@ export class AppComponent implements OnInit {
   
   title = 'todo-frontend-X';
   todos : Todo[] = [];
-  private URL = 'http://localhost:8080/';
+  private URL = environment.apiUrl;
 
   ngOnInit(): void {
     this.getTodos().subscribe(data =>{this.todos = data;});
+    console.log(environment.apiUrl);
     console.log("init list: "+this.todos);
   }
 

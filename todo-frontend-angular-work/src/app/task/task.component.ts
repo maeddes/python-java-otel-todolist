@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-task',
@@ -13,7 +14,7 @@ import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
 export class TaskComponent{
 
   constructor( private http: HttpClient, public dialog: MatDialog){}
-  private URL = 'http://localhost:8080/';
+  private URL = environment.apiUrl;
   @Output() updateTodosEvent = new EventEmitter<void>();
   
   @Input() todo: Todo = {
