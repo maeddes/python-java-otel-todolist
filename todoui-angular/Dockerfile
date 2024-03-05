@@ -1,4 +1,4 @@
-FROM node:lts AS builder
+FROM docker.io/node:lts AS builder
 # define build arguments
 ARG STAGE=development
 # default max RAM is 16GB
@@ -11,7 +11,7 @@ RUN npm ci
 
 RUN node --max_old_space_size=${MAX_NODE_RAM} node_modules/@angular/cli/bin/ng build --configuration ${STAGE} --extract-licenses
 
-FROM node:hydrogen-slim
+FROM docker.io/node:hydrogen-slim
 ENV TZ=Europe/Berlin
 # Create app directory
 WORKDIR /usr/src/app
