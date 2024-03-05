@@ -1,37 +1,50 @@
 // todo.component.ts
 
-import { Component } from '@angular/core';
-import { TodoService } from '../todo.service'; // Update the path as needed
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
+import { TodoService } from './services/todo.service';
+import { FormsModule } from '@angular/forms';
+import { firstValueFrom } from 'rxjs'; // Update the path as needed
 
 @Component({
   selector: 'app-todo',
+  standalone: true,
   templateUrl: './todo.component.html',
-  styleUrls: ['./todo.component.css'],
+  imports: [FormsModule],
+  providers: [TodoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoComponent {
-  todos: string[] = [];
-  newTodo: string = '';
+  private readonly todoService = inject(TodoService);
+  readonly todos = signal<string[]>([]);
+  readonly newTodo = signal('');
 
-  constructor(private todoService: TodoService) {}
-
-  addTodo() {
-    if (this.newTodo.trim() !== '') {
-      this.todoService.addTodo(this.newTodo.trim()).subscribe(() => {
-        this.getTodos(); // Refresh the list after adding
-        this.newTodo = ''; // Clear the input field
-      });
+  async addTodo() {
+    if (this.newTodo().trim()) {
+      await firstValueFrom(this.todoService.addTodo(this.newTodo().trim()))
+        .then(async () => {
+          this.newTodo.set(''); // Clear the input field
+          await this.getTodos(); // Refresh the list after adding
+        })
+        .catch(() => console.error('Error adding new todo'));
     }
   }
 
-  removeTodo(todo: string) {
-    this.todoService.removeTodo(todo).subscribe(() => {
-      this.getTodos(); // Refresh the list after deleting
-    });
+  async removeTodo(todo: string) {
+    await firstValueFrom(this.todoService.removeTodo(todo))
+      .then(() => {
+        this.getTodos(); // Refresh the list after deleting
+      })
+      .catch(() => console.log('Error occurred while trying to delete todo'));
   }
 
-  getTodos() {
-    this.todoService.getTodos().subscribe((todos) => {
-      this.todos = todos;
-    });
+  async getTodos() {
+    await firstValueFrom(this.todoService.getTodos())
+      .then((todos) => this.todos.set(todos))
+      .catch(() => console.error('Error occurred while trying to get todos'));
   }
 }

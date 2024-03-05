@@ -1,17 +1,12 @@
 FROM docker.io/node:lts AS builder
-# define build arguments
-ARG STAGE=development
-# default max RAM is 16GB
-ARG MAX_NODE_RAM=16384
 
 WORKDIR /app
 COPY . .
 
 RUN npm ci
+RUN npm run build
 
-RUN node --max_old_space_size=${MAX_NODE_RAM} node_modules/@angular/cli/bin/ng build --configuration ${STAGE} --extract-licenses
-
-FROM docker.io/node:hydrogen-slim
+FROM docker.io/node:lts-slim
 ENV TZ=Europe/Berlin
 # Create app directory
 WORKDIR /usr/src/app
@@ -23,8 +18,8 @@ RUN npm ci --only=production --ignore-scripts
 
 # Copy from builder docker container
 # Bundle app source
-COPY --from=builder /app/dist/todoui-angular/server .
+COPY --from=builder /app/dist/todoui-angular .
 # bind port
 EXPOSE 4000
 # start server
-CMD [ "node", "server.mjs" ]
+CMD [ "node", "server/server.mjs" ]
