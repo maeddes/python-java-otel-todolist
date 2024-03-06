@@ -1,0 +1,30 @@
+h1 {
+  margin: 2rem;
+  align-self: center;
+}
+
+div {
+  margin: 0.5rem;
+
+  &.wrapper {
+    display: flex;
+    max-width: 300px;
+    background: lightgray;
+    padding: 0.5rem;
+    flex-direction: column;
+  }
+
+  &.list-wrapper {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  &.add {
+    align-self: center;
+  }
+}
+
+li {
+  margin: 0.5rem;
+}
+

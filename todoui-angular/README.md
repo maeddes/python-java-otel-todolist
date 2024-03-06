@@ -12,4 +12,4 @@ Run `docker build -t todo-ui .` to build the application.
 Run `docker run -d --env API_URL=https://example.url.com -p 4000:4000 todo-ui` to start the application on port `4000`.
 
 ### Change ENV variable
-To change the API URL (`API_URL`), the container has to be stopped and rerun with a new value for the URL. The application will show the current URL on the landing page. 
+To change the API URL (`API_URL`), the container has to be stopped and rerun with a new value for the URL.
