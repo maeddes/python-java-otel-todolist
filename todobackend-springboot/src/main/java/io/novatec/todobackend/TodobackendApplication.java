@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 import io.opentelemetry.instrumentation.annotations.SpanAttribute;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
@@ -57,23 +58,22 @@ public class TodobackendApplication {
 	}
 
 	@GetMapping("/todos/")
-	List<String> getTodos(){
+	ResponseEntity<List<String>> getTodos(){
 
 		List<String> todos = new ArrayList<String>();
 
 		//for(Todo todo : todoRepository.findAll()) todos.add(todo.getTodo());
 		todoRepository.findAll().forEach(todo -> todos.add(todo.getTodo()));
 
-		return todos;
+		return ResponseEntity.ok(todos);
 	}
 
 	@PostMapping("/todos/{todo}")
-	String addTodo(@PathVariable String todo){
+	ResponseEntity<String> addTodo(@PathVariable String todo){
 
 		this.someUselessMethod(todo);
 		//todoRepository.save(new Todo(todo));
-		return todo;
-
+		return ResponseEntity.ok("{\"message\": \"added " + todo + "\"}");
 	}
 
 	@WithSpan
@@ -96,10 +96,10 @@ public class TodobackendApplication {
 	}
 
 	@DeleteMapping("/todos/{todo}")
-	String removeTodo(@PathVariable String todo) {
+	ResponseEntity<String> removeTodo(@PathVariable String todo) {
 
 		todoRepository.deleteById(todo);
-		return "removed "+todo;
+		return ResponseEntity.ok("{\"message\": \"removed " + todo + "\"}");
 
 	}
 
