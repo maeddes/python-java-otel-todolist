@@ -1,17 +1,14 @@
 // todo.service.ts
 
-import { Injectable } from '@angular/core';
-import { HttpClient,HttpHeaders } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../environments/environment';
+import { AppEnvProvider } from '../../app-env.provider';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class TodoService {
-  private apiUrl = environment.apiUrl;
-
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = inject(AppEnvProvider).API_URL;
 
   addTodo(todo: string): Observable<string> {
     // Set headers to specify no request body
@@ -19,7 +16,9 @@ export class TodoService {
       'Content-Type': 'application/json',
     });
 
-    return this.http.post<string>(`${this.apiUrl}/todos/${todo}`, null, { headers });
+    return this.http.post<string>(`${this.apiUrl}/todos/${todo}`, null, {
+      headers,
+    });
   }
 
   removeTodo(todo: string): Observable<string> {

@@ -1,14 +1,17 @@
 <!-- todo.component.html -->
+<h2>ToDo App</h2>
+<input
+  [ngModel]="newTodo()"
+  (ngModelChange)="newTodo.set($event)"
+  placeholder="Add a new ToDo"
+/>
+<button (click)="addTodo()">Add</button>
 
-<div>
-    <h2>ToDo App</h2>
-    <input [(ngModel)]="newTodo" placeholder="Add a new ToDo" />
-    <button (click)="addTodo()">Add</button>
-
-    <ul>
-      <li *ngFor="let todo of todos">
-        {{ todo }}
-        <button (click)="removeTodo(todo)">Delete</button>
-      </li>
-    </ul>
-  </div>
+<ul>
+  @for (todo of todos(); track todo) {
+    <li>
+      {{ todo }}
+      <button (click)="removeTodo(todo)">Delete</button>
+    </li>
+  }
+</ul>
