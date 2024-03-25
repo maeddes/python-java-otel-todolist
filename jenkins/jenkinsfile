@@ -1,0 +1,43 @@
+  podTemplate(containers: [
+  containerTemplate(name: 'maven', image: 'maven:3.8.7-eclipse-temurin-17-alpine', command: 'sleep', args: '99d'),
+  containerTemplate(name: 'docker-builder', image: 'maeddes/podman:v0324', command: 'sleep', args: '99d', privileged: true)
+  ],
+  volumes: [
+    hostPathVolume(hostPath: '/var/lib/containers', mountPath: '/var/lib/containers')
+  ]
+)
+{
+  node(POD_LABEL) {
+
+    stage('Checkout Git') {
+      git(
+        url: 'https://github.com/maeddes/python-java-otel-todolist',
+        branch: 'main'
+      )
+    }
+    
+    stage('Build Docker Image todoui-angular') {
+      container('docker-builder') {
+        dir('todoui-angular') {
+          sh 'podman build -f Dockerfile -t todoui-angular:v.0.1 .'
+        }
+      }
+    }
+    
+    stage('Build Docker Image todoui-thymeleaf') {
+      container('docker-builder') {
+        dir('todoui-thymeleaf') {
+          sh 'podman build -f Dockerfile-multistage -t todoui-thymeleaf:v.0.1 .'
+        }
+      }
+    }
+  
+    stage('Build Docker Image todoui-flask') {
+      container('docker-builder') {
+        dir('todoui-flask') {
+          sh 'podman build -f Dockerfile -t todoui-flask:v.0.1 .'
+        }
+      }
+    }
+  }
+}

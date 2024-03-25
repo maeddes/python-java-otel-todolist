@@ -9,14 +9,15 @@ import org.springframework.web.bind.annotation.*;
 
 import io.opentelemetry.instrumentation.annotations.SpanAttribute;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
 @RestController
+@CrossOrigin(origins = "*")
 public class TodobackendApplication {
 
 	@Value("${CF_INSTANCE_GUID:not_set}")

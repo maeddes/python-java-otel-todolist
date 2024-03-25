@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17
+FROM docker.io/eclipse-temurin:17
 RUN mkdir -p /opt/todoui
 WORKDIR /opt/todoui
 ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/latest/download/opentelemetry-javaagent.jar .

@@ -37,5 +37,5 @@ def delete(todo):
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
     # app.run(debug=True) # doesn't work with auto instrumentation

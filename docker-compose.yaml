@@ -4,6 +4,7 @@ services:
 
   postgresdb:
     image: postgres
+
     ports:
       - 5432:5432
     environment:
@@ -11,25 +12,45 @@ services:
       - POSTGRES_USER=matthias
       - POSTGRES_DB=mydb
 
-  todobackend:
-    image: maeddes/todobackend:oinst
+  todobackend-springboot:
+    image: maeddes/todobackend:v2402
+    build:
+      context: ./todobackend-springboot
+      dockerfile: Dockerfile-multistage
     ports:
       - "8080:8080"
     environment:
-      SPRING_PROFILES_ACTIVE: prod
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
-      OTEL_RESOURCE_ATTRIBUTES: service.name=todobackend
-
+      - SPRING_PROFILES_ACTIVE=prod
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=todobackend-springboot
+      - OTEL_METRICS_EXPORTER=none
     depends_on:
       - postgresdb
 
-  todoui:
+  todoui-thymeleaf:
     image: maeddes/todoui:otel
+    build:
+      context: ./todoui-thymeleaf
+      dockerfile: Dockerfile-multistage
     ports:
       - "8090:8090"
     environment:
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
-      OTEL_RESOURCE_ATTRIBUTES: service.name=todoui
+      - BACKEND_URL=http://todobackend-springboot:8080/
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=todoui-thymeleaf
+      - OTEL_METRICS_EXPORTER=none
+
+  todoui-flask:
+    image: maeddes/todoui-flask:v0.1
+    build:
+      context: ./todoui-flask
+    ports:
+      - "5000:5000"
+    environment:
+      - BACKEND_URL=http://todobackend-springboot:8080/todos/
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=todoui-flask
+      - OTEL_METRICS_EXPORTER=none
 
   jaeger:
     image: jaegertracing/all-in-one:latest
@@ -39,14 +60,5 @@ services:
       - "16686:16686"
       - "14250"
       - "14269:14269"
-
-  # collector:
-  #   image: otel/opentelemetry-collector:latest
-  #   command: [ "--config=/etc/otel-collector-config.yaml" ]
-  #   volumes:
-  #     - ./otel-config.yaml:/etc/otel-collector-config.yaml
-  #   ports:
-  #     - "4317:4317"
-  #   depends_on:
-  #     - jaeger-service
+      - "4317:4317"
 

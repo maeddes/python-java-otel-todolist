@@ -1,4 +1,0 @@
-applications:
-- name: todobackend
-  env:
-    SPRING_PROFILES_ACTIVE: dev

@@ -1,0 +1,13 @@
+.input-container{
+    display: flex;
+    justify-content: center;
+    padding: 1vh;
+    align-items: center;
+}
+.inputfield{
+    width: 50vh;
+}
+.inputButton{
+    height: 50px !important;
+    width: 100px !important;
+}

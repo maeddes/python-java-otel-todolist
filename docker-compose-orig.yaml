@@ -11,17 +11,27 @@ services:
       - POSTGRES_USER=matthias
       - POSTGRES_DB=mydb
 
-  todobackend:
+  todobackend-springboot:
     image: maeddes/todobackend:orig
     ports:
       - "8080:8080"
     depends_on:
       - postgresdb
 
-  todoui:
+  todoui-thymeleaf:
     image: maeddes/todoui:orig
     ports:
       - "8090:8090"
+    environment:
+      - BACKEND_URL=http://todobackend-springboot:8080/todos/
+
+  todoui-flask:
+    image: maeddes/simple-flask:v0.1
+    ports:
+      - "5000:5000"
+    environment:
+      - BACKEND_URL=http://todobackend-springboot:8080/todos/
+      - OTEL_EXPORTER_OTLP_ENDPOINT=jaeger:4317
 
   jaeger:
     image: jaegertracing/all-in-one:latest
