@@ -1,25 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
+
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToDo App</title>
+    <title>Most beautiful of all Python Todo Lists</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"/>
 <body>
-    <h1>ToDo List</h1>
-    <ul>
+
+<div class="w3-row-padding w3-section" style="margin: 0px auto; width: 800px;" >
+
+    <header class="w3-container w3-teal">
+        <h1>Most beautiful of all Python Todo Lists</h1>
+    </header>
+
+    <h2>Add a ToDo</h2>
+
+    <div>
+        <table class="w3-table-all w3-hoverable">
+            <tr class="w3-teal">
+                <th width="600px">Item</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <form action="/add" method="post">
+                    <td>
+                        <label for="description">Description:</label>
+                        <input type="text" id="todo" name="todo" required>
+                    </td>
+                    <td>
+                        <input class="w3-button w3-black" type="submit" value="Submit!"/>
+                    </td>
+                </form>
+
+            </tr>
+        </table>
+    </div>
+
+    {% if todos %}
+
+    <table class="w3-table-all w3-hoverable">
+        <tr class="w3-teal">
+            <th width="600px">Item</th>
+            <th>Action</th>
+        </tr>
         {% for todo in todos %}
-            <li>
-                {{ todo }}
-                <a href="{{ url_for('delete', todo=todo) }}">Delete</a>
-            </li>
+        <tr>
+            <td>{{ todo }}</td>
+            <td>
+                <form action="/delete" method="post">
+                    <input type="hidden" id="todo" name="todo" value="{{ todo }}" />
+                    <input class="w3-button w3-black" type="submit" value="Done!"/>
+                </form>
+            </td>
+        </tr>
         {% endfor %}
-    </ul>
-    <form action="/add" method="post">
-        <label for="title">New ToDo:</label>
-        <input type="text" id="title" name="title" required>
-        <button type="submit">Add</button>
-    </form>
-</body>
-</html>
+    </table>
+    
+
+    {% else %}
+
+    <table class="w3-table-all w3-hoverable">
+        <tr class="w3-teal">
+            <th width="600px">Item</th>
+            <th>Action</th>
+        </tr>
+        <tr>
+            <td>You have no ToDos :-)</td>
+            <td>None</td>
+        </tr>
+    </table>
+
+    {% endif %}
+
+</div>

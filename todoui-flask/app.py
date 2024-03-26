@@ -26,14 +26,17 @@ def index():
 def add():
 
     if request.method == 'POST':
-        new_todo = request.form['title']
+        new_todo = request.form['todo']
         response = requests.post(app.config['BACKEND_URL']+new_todo)
     return redirect(url_for('index'))
 
-@app.route('/delete/<string:todo>')
-def delete(todo):
+@app.route('/delete', methods=['POST'])
+def delete():
 
-    response = requests.delete(app.config['BACKEND_URL']+todo)
+    if request.method == 'POST':
+        delete_todo = request.form['todo']
+        print(delete_todo)
+    response = requests.delete(app.config['BACKEND_URL']+delete_todo)
     return redirect(url_for('index'))
 
 if __name__ == '__main__':

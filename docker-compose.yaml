@@ -13,35 +13,40 @@ services:
       - POSTGRES_DB=mydb
 
   todobackend-springboot:
-    image: maeddes/todobackend:v2402
+    image: todobackend:v2402
     build:
       context: ./todobackend-springboot
-      dockerfile: Dockerfile-multistage
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+#      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318 # http endpoint
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_EXPORTER_OTLP_TRACES_PROTOCOL=grpc
       - OTEL_RESOURCE_ATTRIBUTES=service.name=todobackend-springboot
       - OTEL_METRICS_EXPORTER=none
+      - OTEL_LOGS_EXPORTER=none
     depends_on:
       - postgresdb
 
   todoui-thymeleaf:
-    image: maeddes/todoui:otel
+    image: todoui:otel
     build:
       context: ./todoui-thymeleaf
-      dockerfile: Dockerfile-multistage
+      dockerfile: Dockerfile #-multistage
     ports:
       - "8090:8090"
     environment:
       - BACKEND_URL=http://todobackend-springboot:8080/
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_EXPORTER_OTLP_TRACES_PROTOCOL=grpc
       - OTEL_RESOURCE_ATTRIBUTES=service.name=todoui-thymeleaf
       - OTEL_METRICS_EXPORTER=none
+      - OTEL_LOGS_EXPORTER=none
 
   todoui-flask:
-    image: maeddes/todoui-flask:v0.1
+    image: todoui-flask:v0.1
     build:
       context: ./todoui-flask
     ports:
