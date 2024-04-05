@@ -1,5 +1,11 @@
 package io.novatec.todobackend;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -12,13 +18,13 @@ import io.opentelemetry.instrumentation.annotations.WithSpan;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @SpringBootApplication
 @RestController
 @CrossOrigin(origins = "*")
+
 public class TodobackendApplication {
+
+	private Logger logger = LoggerFactory.getLogger(TodobackendApplication.class);
 
 	@Value("${CF_INSTANCE_GUID:not_set}")
 	String cfInstance;
@@ -59,10 +65,14 @@ public class TodobackendApplication {
 	@GetMapping("/todos/")
 	List<String> getTodos(){
 
+		logger.info(cfInstance);
+
 		List<String> todos = new ArrayList<String>();
 
 		//for(Todo todo : todoRepository.findAll()) todos.add(todo.getTodo());
 		todoRepository.findAll().forEach(todo -> todos.add(todo.getTodo()));
+		logger.info("GET /todos/ "+todos.toString());
+
 
 		return todos;
 	}
@@ -70,14 +80,16 @@ public class TodobackendApplication {
 	@PostMapping("/todos/{todo}")
 	String addTodo(@PathVariable String todo){
 
-		this.someUselessMethod(todo);
+		this.someInternalMethod(todo);
 		//todoRepository.save(new Todo(todo));
+		logger.info("POST /todos/ "+todo.toString());
+
 		return todo;
 
 	}
 
 	@WithSpan
-	String someUselessMethod(@SpanAttribute String todo){
+	String someInternalMethod(@SpanAttribute String todo){
 
 		todoRepository.save(new Todo(todo));
 		if(todo.equals("slow")){
@@ -99,6 +111,7 @@ public class TodobackendApplication {
 	String removeTodo(@PathVariable String todo) {
 
 		todoRepository.deleteById(todo);
+		logger.info("DELETE /todos/ "+todo.toString());
 		return "removed "+todo;
 
 	}

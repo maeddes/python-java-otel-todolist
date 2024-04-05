@@ -19,9 +19,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @SpringBootApplication
 @Controller
 public class TodouiApplication {
+
+	private Logger logger = LoggerFactory.getLogger(TodouiApplication.class);
 
 	@Value("${backend.url}")
 	String endpoint;
@@ -30,28 +35,18 @@ public class TodouiApplication {
 	@PostConstruct
 	public void postConstruct(){
 
-		System.out.println(" UI initialized for backend at "+endpoint);
-	}
-
-	@GetMapping
-	public String getItems(Model model){
-
-		System.out.println(" Invoking: "+ endpoint + "/todos/");
-		ResponseEntity<String[]> response = template.getForEntity(endpoint+"/todos/", String[].class);
-		if(response != null) model.addAttribute("items", response.getBody());
-		return "items";
-
+		logger.info(" UI initialized for backend at "+endpoint);
 	}
 
 	@GetMapping("/stress")
 	public String stress(){
 
-		System.out.println(java.time.LocalDateTime.now() + " : Starting stress");
+		logger.info(java.time.LocalDateTime.now() + " : Starting stress");
 		double result = 0;
 		for (int i = 0; i < 100000000; i++) {
 			result += System.currentTimeMillis();
 		}
-		System.out.println(java.time.LocalDateTime.now() + " : Ending stress, result: " + result);
+		logger.info(java.time.LocalDateTime.now() + " : Ending stress, result: " + result);
 		return "redirect:/";
 
 	}
@@ -60,11 +55,11 @@ public class TodouiApplication {
 	@GetMapping("/leak")
 	public String leak(){
 
-		System.out.println(java.time.LocalDateTime.now() + " : Start leaking");
+		logger.info(java.time.LocalDateTime.now() + " : Start leaking");
 		for (int i = 0; i < 10000000; i++) {
 			list.add(Math.random());
 		}
-		System.out.println(java.time.LocalDateTime.now() + " : End leaking");
+		logger.info(java.time.LocalDateTime.now() + " : End leaking");
 		return "redirect:/";
 
 	}
@@ -90,9 +85,21 @@ public class TodouiApplication {
 
 	}
 
+
+	@GetMapping
+	public String getItems(Model model){
+
+		logger.info("GET "+ endpoint + "/todos/");
+		ResponseEntity<String[]> response = template.getForEntity(endpoint+"/todos/", String[].class);
+		if(response != null) model.addAttribute("items", response.getBody());
+		return "items";
+
+	}
+
 	@PostMapping
 	public String addItem(String toDo){
 
+		logger.info("POST "+ endpoint + "/todos/"+toDo);
 		template.postForEntity(endpoint+"/todos/"+toDo, null, String.class);
 		return "redirect:/";
 
@@ -101,7 +108,7 @@ public class TodouiApplication {
 	@PostMapping("{toDo}")
 	public String setItemDone(@PathVariable String toDo){
 
-
+		logger.info("POST "+ endpoint + "/todos/"+toDo);
 		template.delete(endpoint+"/todos/"+toDo);
 		return "redirect:/";
 
